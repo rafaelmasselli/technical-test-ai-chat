@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ChatDto } from 'src/modules/chat/dto/chatDto';
-import { Prompt } from 'src/core/useCases/promptAi';
 
 @Injectable()
 export class ChatService {
@@ -19,14 +18,11 @@ export class ChatService {
       userMessage.role = 'user';
       const savedUserMessage = await this.chatRepository.save(userMessage);
 
-      const streamingResult = await this.generativeModel.generateContentStream(
-        Prompt(userInput),
-      );
+      const streamingResult =
+        await this.generativeModel.generateContentStream(userInput);
       let responseText = '';
 
       for await (const item of streamingResult.stream) {
-        console.log('Item do stream:', JSON.stringify(item, null, 2));
-
         if (item.candidates && Array.isArray(item.candidates)) {
           const candidate = item.candidates[0]?.content;
 
@@ -44,7 +40,6 @@ export class ChatService {
       aiMessage.message = responseText.trim() || 'Sem resposta do modelo.';
       aiMessage.role = 'ai';
       await this.chatRepository.save(aiMessage);
-
       return responseText.trim() || 'Sem resposta do modelo.';
     } catch (error) {
       console.error('Erro ao gerar resposta do modelo:', error);

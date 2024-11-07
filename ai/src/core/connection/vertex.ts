@@ -5,6 +5,11 @@ import {
   VertexAI,
 } from '@google-cloud/vertexai';
 import { vertexConfig } from '../../config/secret/gemini';
+import { vascoPrompts } from '../useCases/systemInstruction/vasco';
+
+const createPrompt = () => {
+  return vascoPrompts.join(' ');
+};
 
 const vertexAI = new VertexAI({
   project: vertexConfig.project,
@@ -19,11 +24,8 @@ export const generativeModel = vertexAI.getGenerativeModel({
       threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
     },
   ],
-  generationConfig: { maxOutputTokens: 256 },
-  systemInstruction: {
-    role: 'system',
-    parts: [{ text: `For example, you are a helpful customer service agent.` }],
-  },
+  generationConfig: { maxOutputTokens: 1000 },
+  systemInstruction: createPrompt(),
 });
 
 const generativeVisionModel = vertexAI.getGenerativeModel({
