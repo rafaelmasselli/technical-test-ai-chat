@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { LoggerModule } from './core/logger/logger.module';
 import { ChatModule } from './modules/chat/chat.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfig } from './config/secret/typeOrmConfig';
 
 @Module({
-  imports: [LoggerModule, ChatModule],
+  imports: [LoggerModule, ChatModule, TypeOrmModule.forRoot(typeOrmConfig)],
   controllers: [],
   providers: [],
 })

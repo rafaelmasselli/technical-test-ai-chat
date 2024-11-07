@@ -8,6 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, new FastifyAdapter());
   const logger = app.get(CustomLoggerService);
   app.useGlobalInterceptors(new LoggingInterceptor(logger));
+  app.enableCors();
   await app.listen(4444);
 }
 bootstrap();
