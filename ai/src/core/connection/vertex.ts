@@ -4,11 +4,27 @@ import {
   HarmCategory,
   VertexAI,
 } from '@google-cloud/vertexai';
-import { vertexConfig } from '../../config/secret/gemini';
+import { vertexConfig } from '../../common/config/secret/gemini';
 import { vascoPrompts } from '../useCases/systemInstruction/vasco';
+import { pokemonPrompts } from '../useCases/systemInstruction/pokemon';
+import { compraRapidaPrompts } from '../useCases/systemInstruction/compra';
+
+type IArgs = 'pokemon' | 'compra' | null;
+
+function initPrompt() {
+  const args = process.argv[2] as IArgs;
+  switch (args) {
+    case 'compra':
+      return compraRapidaPrompts;
+    case 'pokemon':
+      return pokemonPrompts;
+    default:
+      return vascoPrompts;
+  }
+}
 
 const createPrompt = () => {
-  return vascoPrompts.join(' ');
+  return initPrompt().join(',');
 };
 
 const vertexAI = new VertexAI({

@@ -13,13 +13,16 @@ export class ChatService {
 
   async handleAiChat(userInput: string): Promise<string> {
     try {
+      const userHistory = await this.getUserMessagesHistory();
+      const prompt = `${userHistory} | ${userInput} |`;
+
       const userMessage = new ChatDto();
       userMessage.message = userInput;
       userMessage.role = 'user';
-      const savedUserMessage = await this.chatRepository.save(userMessage);
+      await this.chatRepository.save(userMessage);
 
       const streamingResult =
-        await this.generativeModel.generateContentStream(userInput);
+        await this.generativeModel.generateContentStream(prompt);
       let responseText = '';
 
       for await (const item of streamingResult.stream) {
@@ -45,5 +48,19 @@ export class ChatService {
       console.error('Erro ao gerar resposta do modelo:', error);
       throw new Error('Erro ao processar a resposta do AI');
     }
+  }
+
+  private async getUserMessagesHistory(): Promise<string> {
+    const userMessages = await this.chatRepository.find({
+      where: { role: 'user' },
+      order: { timestamp: 'ASC' },
+    });
+
+    let concatenatedMessages = '';
+    userMessages.forEach((message) => {
+      concatenatedMessages += message.message + ' | ';
+    });
+
+    return concatenatedMessages.trim();
   }
 }
