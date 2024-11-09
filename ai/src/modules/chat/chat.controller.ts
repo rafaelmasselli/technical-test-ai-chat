@@ -1,4 +1,4 @@
-import { Controller, Post, Query, Res, Body } from '@nestjs/common';
+import { Controller, Post, Res, Body } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
 import { ChatService } from './chat.service';
 import { IChat } from '../../common/interface/chat';
