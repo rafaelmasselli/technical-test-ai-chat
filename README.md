@@ -1,10 +1,15 @@
+# Assistente de IA no WhatsApp com Gemini
+
+<div align="center">
+  <img src="./.github/icon.jpg" width="250" />
+</div>
 
 ## Índice
 
 - [Descrição do Projeto](#descrição-do-projeto)
 - [Funcionalidades](#funcionalidades)
 - [Estrutura de Pastas](#estrutura-de-pastas)
-- [Configuração](#configuração)
+- [Configuração do Google Cloud Vertex AI](#configuração-do-google-cloud-vertex-ai)
 - [Execução do Projeto](#execução-do-projeto)
 - [Dependências Principais](#dependências-principais)
 - [Variáveis de Ambiente](#variáveis-de-ambiente)
@@ -14,7 +19,13 @@
 
 ## Descrição do Projeto
 
-Este projeto foi desenvolvido para agilizar o checkout e oferecer uma experiência de compra mais conveniente e eficiente. O sistema utiliza inteligência artificial para preencher automaticamente as informações de pagamento e entrega dos clientes.
+Este projeto utiliza a inteligência artificial do Gemini para criar um assistente virtual que interage com os usuários via WhatsApp. O bot foi desenvolvido para responder a três prompts específicos, proporcionando uma experiência personalizada para os usuários:
+
+- **Vasco**: O bot oferece respostas e interações sobre o time de futebol Vasco, com informações históricas, estatísticas e curiosidades.
+- **Pokémon**: O bot interage com os usuários sobre o universo Pokémon, compartilhando dados sobre os jogos, personagens e eventos.
+- **Compra Rápida**: O bot apresenta algumas informações formais sobre a empresa, incluindo sua missão de otimizar o processo de checkout, reduzir o abandono de carrinhos e aumentar as taxas de conversão dos lojistas.
+
+A integração entre WhatsApp e Gemini permite que o bot tenha uma comunicação natural e fluida com os usuários, atendendo suas dúvidas e necessidades de forma interativa.
 
 ## Funcionalidades
 
@@ -145,7 +156,7 @@ As configurações de segurança, prompts e informações da IA são armazenadas
 
 As variáveis de ambiente são configuradas em arquivos específicos dentro do projeto, e são essenciais para a integração com serviços externos, como o **Google Cloud Vertex AI**, e para a configuração do banco de dados local. Abaixo estão os detalhes das variáveis de ambiente utilizadas no projeto.
 
-### Configuração do Google Cloud Vertex AI
+## Configuração do Google Cloud Vertex AI
 
 A configuração do **Google Cloud Vertex AI** é armazenada no arquivo `vertexConfig`. Esta configuração define as informações de conexão com o Google Cloud, incluindo o ID do projeto, a localização do serviço e os modelos de IA utilizados. O conteúdo deste arquivo é o seguinte:
 
@@ -158,19 +169,66 @@ export const vertexConfig = {
 };
 ```
 
+## Execução do Projeto
+
+Este projeto é uma aplicação desenvolvida com o [NestJS](https://nestjs.com/), que integra um bot de WhatsApp com inteligência artificial, utilizando o Gemini para fornecer respostas baseadas em prompts específicos.
+
+## Requisitos
+
+Antes de iniciar a execução, verifique se você possui os seguintes requisitos:
+
+- Node.js (versão 16 ou superior)
+- NestJS CLI (`npm install -g @nestjs/cli`)
+- Docker (opcional, caso queira usar um contêiner para o banco de dados)
+- Yarn ou npm para gerenciar pacotes
+
+## Passos para Execução
+
+### 1. Clonar o Repositório
+
+Clone o repositório do projeto em sua máquina local:
+
+```bash
+git clone https://github.com/rafaelmasselli/technical-test-ai-chat
+cd technical-test-ai-chat
+```
+
+### 2. Instalar dependências
+
+[Use o gerenciador de pacotes de sua preferencia](https://luby.com.br/desenvolvimento/software/tutoriais/gerenciador-de-pacotes/)
+Execute a instalação
+
+```bash
+npm install
+```
+
+### 3. Inicie o projeto
+
+Siga os comandos de execução para iniciar o projeto de usa preferencia
+
+- [Comandos de Execução](#comandos-de-execução)
+
 ## Comandos de Execução
 
-1. **Desenvolvimento com o Módulo de Compra Rápida**:
+1. **Desenvolvimento com o Módulo de IA da Compra Rápida**:
    Para iniciar o projeto no modo de desenvolvimento com o módulo de "compra rápida", execute o comando abaixo:
 
 ```bash
 npm run dev:compra
 ```
 
-2. **Desenvolvimento com o Módulo de Compra Rápida**:
+2. **Desenvolvimento com o Módulo de IA do Pokemon**:
 
 Para rodar o módulo Pokémon, utilize o seguinte comando:
 
 ```bash
  npm run dev:pokemon
+```
+
+3. **Desenvolvimento com o Módulo de IA do Vasco**:
+
+Para rodar o módulo do vasco, utilize o seguinte comando:
+
+```bash
+ npm run start:dev
 ```
