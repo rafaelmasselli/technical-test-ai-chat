@@ -14,12 +14,15 @@
     ]
   },
   "scripts": {
-    "start": "ts-node index.ts"
+    "start": "ts-node index.ts",
+    "dev": "nodemon index.ts"
   },
   "dependencies": {
     "@google-cloud/spanner": "^7.14.0",
     "@types/node": "^14.0.0",
+    "nodemon": "^3.1.7",
     "puppeteer": "^23.6.0",
+    "qrcode": "^1.5.4",
     "qrcode-terminal": "^0.12.0",
     "whatsapp-web.js": "^1.26.0"
   },

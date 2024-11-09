@@ -1,20 +1,11 @@
 {
-     "compilerOptions": {
-          "module": "commonjs",
-          "declaration": true,
-          "removeComments": true,
-          "emitDecoratorMetadata": true,
-          "experimentalDecorators": true,
-          "allowSyntheticDefaultImports": true,
-          "target": "ES2021",
-          "sourceMap": true,
-          "baseUrl": "./",
-          "incremental": true,
-          "skipLibCheck": true,
-          "strictNullChecks": false,
-          "noImplicitAny": false,
-          "strictBindCallApply": false,
-          "forceConsistentCasingInFileNames": false,
-          "noFallthroughCasesInSwitch": false
-     },
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node", "jest"]
+  }
 }
