@@ -95,9 +95,9 @@ Para rodar o módulo do vasco, utilize o seguinte comando:
 
 Como o **Google Cloud Vertex AI**, e para a configuração do banco de dados local. Abaixo estão os detalhes das variáveis de ambiente utilizadas no projeto.
 
-  ### Configuração do Google Cloud Vertex AI
+### Configuração do Google Cloud Vertex AI
 
-  A configuração do **Google Cloud Vertex AI** é armazenada no arquivo `vertexConfig`. Esta configuração define as informações de conexão com o Google Cloud, incluindo o ID do projeto, a localização do serviço e os modelos de IA utilizados. O conteúdo deste arquivo é o seguinte:
+A configuração do **Google Cloud Vertex AI** é armazenada no arquivo `vertexConfig`. Esta configuração define as informações de conexão com o Google Cloud, incluindo o ID do projeto, a localização do serviço e os modelos de IA utilizados. O conteúdo deste arquivo é o seguinte:
 
 ```typescript
 export const vertexConfig = {
@@ -171,18 +171,31 @@ Esse projeto tem como objetivo ser um sistema inteligente, onde os módulos de i
 
 ## Funcionalidades
 
+### Transcrição de Áudio para Texto
+
+O sistema permite que os usuários enviem mensagens de áudio, que são automaticamente convertidas para texto antes de serem processadas pela IA. Esse recurso facilita a interação e melhora a acessibilidade, permitindo que o usuário se comunique por voz e ainda assim receba respostas adequadas baseadas no conteúdo transcrito.
+
+### Geração de Resposta em Áudio
+
+Além de responder em texto, o sistema converte as respostas geradas pela IA em formato de áudio. Esse recurso é especialmente útil em cenários onde uma interação mais natural e verbal é desejada, permitindo ao usuário escutar a resposta diretamente em formato de áudio.
+
 ### Sistema de Prompt Personalizado
 
-Cada módulo de interação com o usuário é alimentado por um conjunto de prompts específicos, que orientam o comportamento da IA para responder de forma alinhada ao objetivo do módulo.
+Cada módulo de interação é orientado por prompts específicos, ajustando o tom e foco da IA para diferentes temas e contextos de resposta:
 
-- **Compra Rápida**: O prompt define claramente que a IA deve focar em explicações e interações sobre o sistema de compras rápidas, mantendo um tom formal e técnico.
-- **Pokemon**: A IA é configurada para fornecer curiosidades, detalhes sobre o universo Pokémon, sem sair do escopo do jogo ou universo relacionado.
-- **Vasco**: Um módulo adicional focado em responder perguntas sobre o time de futebol Vasco, oferecendo curiosidades e informações históricas.
+- **Compra Rápida**: A IA responde de forma formal e técnica, com foco em explicações sobre o sistema de compras rápidas.
+- **Pokemon**: A IA fornece informações e curiosidades do universo Pokémon, mantendo um tom informativo e restrito ao universo do jogo.
+- **Vasco**: Focado no time de futebol Vasco, este módulo apresenta curiosidades e histórico do time, com filtros de segurança desativados para respostas mais amplas.
 
 ### Segurança e Filtragem de Conteúdo
 
-A configuração de segurança é uma parte importante da integração com o Google Cloud Vertex AI. A IA é configurada para filtrar conteúdos prejudiciais e indesejados, garantindo que a resposta gerada esteja dentro de um nível de segurança adequado. A segurança é configurada com a categoria **HARM_CATEGORY_DANGEROUS_CONTENT**, bloqueando conteúdos com um nível de risco médio ou mais alto.
+A configuração de segurança é uma parte importante da integração com o Google Cloud Vertex AI, com filtros de segurança personalizados para cada módulo. A IA é configurada para filtrar conteúdos prejudiciais e indesejados, garantindo que a resposta gerada esteja dentro de um nível de segurança adequado para o contexto de uso. Cada módulo possui configurações específicas de filtragem:
 
+- **Compra Rápida**: Configurada com as categorias **HARM_CATEGORY_HATE_SPEECH**, **HARM_CATEGORY_DANGEROUS_CONTENT** e **HARM_CATEGORY_HARASSMENT**, com o threshold configurado em **BLOCK_MEDIUM_AND_ABOVE**, garantindo que qualquer conteúdo prejudicial seja bloqueado de maneira rigorosa para preservar um ambiente formal e técnico.
+
+- **Pokemon**: Configurada com as categorias **HARM_CATEGORY_HATE_SPEECH** e **HARM_CATEGORY_DANGEROUS_CONTENT**, com o threshold em **BLOCK_LOW_AND_ABOVE**, oferecendo um nível de segurança adequado, sem limitar demasiadamente a conversa sobre o universo Pokémon.
+
+- **Vasco**: Este módulo está com o filtro de segurança **desativado** (OFF), permitindo respostas amplas e completas para engajar os usuários com mais liberdade ao discutir curiosidades e informações sobre o time Vasco.
 ### Armazenamento de Configurações
 
 As configurações de segurança, prompts e informações da IA são armazenadas em arquivos de configuração, permitindo fácil acesso e modificação sem a necessidade de alterar o código-fonte diretamente.
