@@ -20,6 +20,7 @@
   "dependencies": {
     "@google-cloud/spanner": "^7.14.0",
     "@types/node": "^14.0.0",
+    "axios": "^1.7.7",
     "nodemon": "^3.1.7",
     "puppeteer": "^23.6.0",
     "qrcode": "^1.5.4",
