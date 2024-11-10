@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ChatDto } from 'src/modules/chat/dto/chatDto';
+import { ChatDto } from '../../modules/chat/dto/chatDto';
 
 @Injectable()
 export class ChatService {
@@ -13,8 +13,8 @@ export class ChatService {
 
   async handleAiChat(userInput: string): Promise<string> {
     try {
-      const prompt = `${userInput}`;
-
+      const history = this.getUserMessagesHistory();
+      const prompt = `${history} | ${userInput}`;
       const userMessage = new ChatDto();
       userMessage.message = userInput;
       userMessage.role = 'user';

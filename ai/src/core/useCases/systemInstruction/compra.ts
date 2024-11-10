@@ -1,4 +1,4 @@
-import { standardPrompt } from "src/common/config/public/standardPrompt";
+import { standardPrompt } from "../../../common/config/public/standardPrompt";
 
 export const compraRapidaPrompts = [
   ...standardPrompt,

@@ -1,5 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ChatDto } from 'src/modules/chat/dto/chatDto';
+import { ChatDto } from '../../../modules/chat/dto/chatDto';
 import * as path from 'path';
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
