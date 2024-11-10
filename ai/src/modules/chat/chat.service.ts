@@ -13,8 +13,7 @@ export class ChatService {
 
   async handleAiChat(userInput: string): Promise<string> {
     try {
-      const userHistory = await this.getUserMessagesHistory();
-      const prompt = `${userHistory} | ${userInput} |`;
+      const prompt = `${userInput}`;
 
       const userMessage = new ChatDto();
       userMessage.message = userInput;

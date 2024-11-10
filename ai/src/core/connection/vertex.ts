@@ -10,9 +10,9 @@ import { pokemonPrompts } from '../useCases/systemInstruction/pokemon';
 import { compraRapidaPrompts } from '../useCases/systemInstruction/compra';
 
 type IArgs = 'pokemon' | 'compra' | null;
+const args = process.argv[2] as IArgs;
 
 function initPrompt() {
-  const args = process.argv[2] as IArgs;
   switch (args) {
     case 'compra':
       return compraRapidaPrompts;
@@ -20,6 +20,39 @@ function initPrompt() {
       return pokemonPrompts;
     default:
       return vascoPrompts;
+  }
+}
+
+function handleFilterAI() {
+  switch (args) {
+    case 'compra':
+      return [
+        {
+          category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        },
+        {
+          category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        },
+        {
+          category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        },
+      ];
+    case 'pokemon':
+      return [
+        {
+          category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+          threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+        },
+        {
+          category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+          threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+        },
+      ];
+    default:
+      return [];
   }
 }
 
@@ -34,12 +67,7 @@ const vertexAI = new VertexAI({
 
 export const generativeModel = vertexAI.getGenerativeModel({
   model: vertexConfig.textModel,
-  safetySettings: [
-    {
-      category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-    },
-  ],
+  safetySettings: handleFilterAI(),
   generationConfig: { maxOutputTokens: 1000 },
   systemInstruction: createPrompt(),
 });
