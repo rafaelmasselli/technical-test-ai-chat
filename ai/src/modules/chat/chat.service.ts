@@ -28,7 +28,6 @@ export class ChatService {
       for await (const item of streamingResult.stream) {
         if (item.candidates && Array.isArray(item.candidates)) {
           const candidate = item.candidates[0]?.content;
-
           if (candidate && Array.isArray(candidate.parts)) {
             candidate.parts.forEach((part) => {
               if (part.text) {

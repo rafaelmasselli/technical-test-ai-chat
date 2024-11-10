@@ -1,64 +1,73 @@
-import { Client, Message } from "whatsapp-web.js";
-import { BotAudio } from "./audio";
+import { Message } from "whatsapp-web.js";
+import { IClients } from "../interface/clients";
+import { CatchPreferenceUser } from "../utils/catchPreferenceUser";
+import { handleInitValidationTypeMessage } from "./validation";
 
-const client = new Client({});
-const userMessagesBuffer = new Map<string, Message[]>();
-
-class Bot {
+export class Bot {
   private message: Message;
-  private audio: BotAudio;
-  constructor(message: Message) {
+  private userCache: Map<string, IClients>;
+  private catchPreferenceUser: CatchPreferenceUser;
+
+  constructor(message: Message, userCache: Map<string, IClients>) {
     this.message = message;
-    this.audio = new BotAudio(message);
+    this.userCache = userCache;
+    this.catchPreferenceUser = new CatchPreferenceUser();
   }
 
-  public async handleBot() {
-    if (this.message.type === "audio" || this.message.type === "ptt") {
-      try {
-        const media = await this.message.downloadMedia();
-        const resultTranslate = await this.audio.translateAudio(media);
-        await this.sendMessage(resultTranslate);
-      } catch (error) {
-        console.error("Erro ao baixar o áudio de voz:", error);
+  async handle() {
+    const phone_id = this.message.from;
+    let user = this.userCache.get(phone_id);
+
+    const handleAlternativePreference = (user: IClients, audio: boolean) => {
+      user.preferences = {
+        audio: audio,
+        init: true,
+      };
+
+      return this.message.reply(`Como posso te ajudar?`);
+    };
+
+    if (!user) {
+      const contact = await this.message.getContact();
+
+      const fullName = contact.pushname || contact.name || "";
+      const [firstName, ...lastNameParts] = fullName.split(" ");
+      const lastName = lastNameParts.join(" ") || "";
+
+      user = {
+        phone_id: phone_id,
+        lastname: lastName,
+        name: firstName,
+        preferences: {
+          audio: false,
+          init: false,
+        },
+      };
+
+      this.userCache.set(phone_id, user);
+      return this.message.reply(
+        `Oi, ${firstName}! Você prefere que eu te responda por áudio ou texto?`
+      );
+    }
+
+    if (!user.preferences.init) {
+      const result = this.catchPreferenceUser.handle(this.message.body, [
+        "audio",
+        "texto",
+      ]);
+
+      switch (result) {
+        case "audio":
+          return handleAlternativePreference(user, true);
+        case "texto":
+          return handleAlternativePreference(user, false);
+        default:
+          return this.message.reply(
+            `Por favor, escolha entre 'texto' ou 'áudio' para preferir como forma de resposta.`
+          );
       }
     } else {
-      await this.sendMessage(this.message.body);
+      return await handleInitValidationTypeMessage(this.message, user);
     }
   }
-
-  private async responseAi(message: string): Promise<string | false> {
-    try {
-      const response = await fetch("http://localhost:4444/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: message,
-        }),
-      });
-
-      const jsonResponse = await response.json();
-      return jsonResponse.response || false;
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
-  }
-
-  private async sendMessage(message: string) {
-    const catchMessageIA = await this.responseAi(message);
-    if (!catchMessageIA) {
-      this.message.reply(
-        "Houve um problema com a IA. Por favor, tente novamente mais tarde."
-      );
-    } else {
-      await this.audio.sendAudio(catchMessageIA);
-    }
-  }
-}
-
-export async function handleBot(message: Message) {
-  const bot = new Bot(message);
-  await bot.handleBot();
 }
