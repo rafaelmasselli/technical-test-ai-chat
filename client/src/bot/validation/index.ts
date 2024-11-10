@@ -1,6 +1,7 @@
 import { Client, Message } from "whatsapp-web.js";
 import { BotAudio } from "../audio";
 import { IClients } from "../../interface/clients";
+import axios from "axios";
 
 const client = new Client({});
 
@@ -30,17 +31,10 @@ class InitValidationTypeMessage {
 
   private async responseAi(message: string): Promise<string | false> {
     try {
-      const response = await fetch("http://localhost:4444/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: message,
-        }),
+      const response = await axios.post("http://localhost:4444/chat", {
+        message: message,
       });
-
-      const jsonResponse = await response.json();
+      const jsonResponse = response.data;
       return jsonResponse.response || false;
     } catch (error) {
       console.log(error);
