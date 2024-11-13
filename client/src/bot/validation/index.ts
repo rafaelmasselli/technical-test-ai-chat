@@ -33,6 +33,7 @@ class InitValidationTypeMessage {
     try {
       const response = await axios.post("http://localhost:4444/chat", {
         message: message,
+        id: this.user.phone_id
       });
       const jsonResponse = response.data;
       return jsonResponse.response || false;

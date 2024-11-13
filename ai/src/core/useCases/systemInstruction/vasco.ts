@@ -1,4 +1,4 @@
-import { standardPrompt } from '../../../common/config/public/standardPrompt';
+import { standardPrompt } from '../../vertex/standardPrompt';
 
 export const vascoPrompts = [
   ...standardPrompt,

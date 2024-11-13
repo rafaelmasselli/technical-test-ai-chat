@@ -15,7 +15,7 @@ export class Bot {
   }
 
   async handle() {
-    const phone_id = this.message.from;
+    const phone_id = (await this.message.getContact()).number;
     let user = this.userCache.get(phone_id);
 
     const handleAlternativePreference = (user: IClients, audio: boolean) => {
@@ -67,7 +67,7 @@ export class Bot {
           );
       }
     } else {
-      return await handleInitValidationTypeMessage(this.message, user);
+      return handleInitValidationTypeMessage(this.message, user);
     }
   }
 }
