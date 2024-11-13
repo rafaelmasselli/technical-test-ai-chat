@@ -7,10 +7,10 @@ import { IChat } from '../../common/interface/chat';
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
   @Post()
-  async getChat(@Body() body: IChat, @Res() res: FastifyReply) {
+  async getChat(@Body() body: any, @Res() res: FastifyReply) {
     try {
-      const { id, message } = body;
-      const response = await this.chatService.handleAiChat(id, message) 
+      const { id, message, userName } = body;
+      const response = await this.chatService.handleAiChat(id, message, userName) 
       return res.status(200).send({ response });
     } catch (error) {
       console.error('Erro no controlador de chat:', error);

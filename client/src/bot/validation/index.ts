@@ -33,7 +33,8 @@ class InitValidationTypeMessage {
     try {
       const response = await axios.post("http://localhost:4444/chat", {
         message: message,
-        id: this.user.phone_id
+        id: this.user.phone_id,
+        userName: this.user.name
       });
       const jsonResponse = response.data;
       return jsonResponse.response || false;
@@ -45,6 +46,7 @@ class InitValidationTypeMessage {
 
   private async sendMessage(message: string) {
     const catchMessageIA = await this.responseAi(message);
+    console.log(catchMessageIA)
     if (!catchMessageIA) {
       this.message.reply(
         "Houve um problema com a IA. Por favor, tente novamente mais tarde."
