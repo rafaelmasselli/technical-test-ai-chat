@@ -1,6 +1,3 @@
-markdown
-Copiar código
-
 # Assistente de IA no WhatsApp com Gemini
 
 <div align="center">
